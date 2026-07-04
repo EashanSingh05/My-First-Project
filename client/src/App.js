@@ -8,9 +8,9 @@ function App() {
     <div style={styles.container}>
       {/* Hero Section */}
       <header style={styles.hero}>
-        <h1 style={styles.title}>Welcome to MySite</h1>
+        <h1 style={styles.title}>Welcome to Eashan's Site</h1>
         <p style={styles.subtitle}>
-          Build something amazing. Start your journey today.
+          Great Ideas Start Here
         </p>
         <a href="#cta" style={styles.ctaButton}>
           Get Started
