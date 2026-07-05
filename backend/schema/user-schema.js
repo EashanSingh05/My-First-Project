@@ -50,7 +50,7 @@ const indexSchema = new Schema({
         required: true,
         trim: true,
         minLength: 8,
-        maxLength: 12,
+
     }
 }) 
 const userSchema = model('USER',indexSchema)
