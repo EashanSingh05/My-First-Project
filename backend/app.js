@@ -1,31 +1,53 @@
-const express = require('express')
-const cors = require('cors')
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const database = require("./database");
+const User = require("./schema/user");
 
-const app = express()
+dotenv.config();
 
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(express.json());
 
-
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello World' })
-})
-
-
-app.post('/register', (req, res) => {
-  const { name, email, password } = req.body
-    console.log('User registered:')
-    console.log('Name:', name)
-    console.log('Email:', email)
-    console.log('Password:', password)
-
-
-res.json({ 
-    message: 'User registered successfully!' 
+app.use(
+  cors({
+    origin: "*",
   })
-})
+);
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000')
-})
+app.post("/", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    console.log(
+      `Received Post Request with name: ${name}, email: ${email}, password: ${password}`
+    );
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+    });
+
+    res.status(201).json(user);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+});
+
+app.get("/", async(req, res) => {
+    const totalUsers = await User.find()
+    res.json(totalUsers)
+});
+
+app.listen(5036, async() => {
+  await database();
+  console.log("Server running on port 5036");
+});
