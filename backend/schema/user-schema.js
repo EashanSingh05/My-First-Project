@@ -32,7 +32,7 @@
 
 const {Schema,model} = require('mongoose')
 
-const userSchema = new Schema({
+const indexSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -53,5 +53,5 @@ const userSchema = new Schema({
         maxLength: 12,
     }
 }) 
-
-module.exports = model('USER',userSchema)
+const userSchema = model('USER',indexSchema)
+module.exports = userSchema
