@@ -1,7 +1,7 @@
 const userSchama = require('../models/user-schema');
 
 
-export const getUser = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
       const { name, email, password } = req.body;
   
@@ -27,7 +27,7 @@ export const getUser = async (req, res) => {
     }
 }
 
-export const createUser = async (req, res) => {
+export const getUser = async (req, res) => {
   const totalUsers = await userSchema.find()
      res.json(totalUsers)
 }

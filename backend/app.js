@@ -15,7 +15,9 @@ app.use(
   })
 );
 
-app.use("/", userRoutes);
+app.use("/user", userRoutes);
+// /user/create-user
+// /user/get-user
 
 
 
