@@ -1,108 +1,83 @@
-// App.js — Simple Landing Page
+// App.js
 
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [nameData, setNameData] = useState("");
+  const [emailData, setEmailData] = useState("");
+  const [passwordData, setPasswordData] = useState("");
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5036", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nameData,
+          email: emailData,
+          password: passwordData,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div style={styles.container}>
-      {/* Hero Section */}
-      <header style={styles.hero}>
-        <h1 style={styles.title}>Welcome to Eashan's Site</h1>
-        <p style={styles.subtitle}>
-          Great Ideas Start Here
-        </p>
-        <a href="#cta" style={styles.ctaButton}>
-          Get Started
-        </a>
-      </header>
+    <>
+      <form
+        onSubmit={submitHandler}
+        style={{
+          marginLeft: "500px",
+          marginTop: "200px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          width: "300px",
+        }}
+      >
+        <label>Name:</label>
+        <input
+          value={nameData}
+          onChange={(e) => setNameData(e.target.value)}
+          type="text"
+          placeholder="Enter your name"
+        />
 
-      {/* Features Section */}
-      <section style={styles.features} id="cta">
-        <div style={styles.featureCard}>
-          <h3>🚀 Fast</h3>
-          <p>Lightning-fast performance out of the box.</p>
-        </div>
-        <div style={styles.featureCard}>
-          <h3>🔒 Secure</h3>
-          <p>Enterprise-grade security by default.</p>
-        </div>
-        <div style={styles.featureCard}>
-          <h3>💡 Simple</h3>
-          <p>Designed with simplicity in mind.</p>
-        </div>
-      </section>
+        <label>Email:</label>
+        <input
+          value={emailData}
+          onChange={(e) => setEmailData(e.target.value)}
+          type="email"
+          placeholder="Enter your email"
+        />
 
-      {/* Footer */}
-      <footer style={styles.footer}>
-        <p>© {new Date().getFullYear()} MySite. All rights reserved.</p>
-      </footer>
-    </div>
+        <label>Password:</label>
+        <input
+          value={passwordData}
+          onChange={(e) => setPasswordData(e.target.value)}
+          type="password"
+          placeholder="Enter your password"
+        />
+
+        <button type="submit">Continue</button>
+      </form>
+    </>
   );
 }
-
-// Inline Styles
-const styles = {
-  container: {
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    textAlign: "center",
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-  },
-  hero: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "60px 20px",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    color: "#fff",
-  },
-  title: {
-    fontSize: "3rem",
-    margin: "0 0 10px",
-  },
-  subtitle: {
-    fontSize: "1.2rem",
-    margin: "0 0 30px",
-    opacity: 0.9,
-  },
-  ctaButton: {
-    display: "inline-block",
-    padding: "14px 36px",
-    fontSize: "1.1rem",
-    color: "#667eea",
-    background: "#fff",
-    borderRadius: "30px",
-    textDecoration: "none",
-    fontWeight: "bold",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-    transition: "transform 0.2s",
-  },
-  features: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "30px",
-    padding: "60px 20px",
-    flexWrap: "wrap",
-    background: "#f9f9f9",
-  },
-  featureCard: {
-    background: "#fff",
-    padding: "30px",
-    borderRadius: "12px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-    width: "260px",
-    textAlign: "center",
-  },
-  footer: {
-    padding: "20px",
-    background: "#333",
-    color: "#aaa",
-    fontSize: "0.9rem",
-  },
-};
 
 export default App;
