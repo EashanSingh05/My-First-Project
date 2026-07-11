@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-export default function AuthPage() {
+
+export default function AuthPage () {
+  const [name,setName] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
@@ -30,24 +32,52 @@ export default function AuthPage() {
       return;
     }
 
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log(isLogin ? 'Login' : 'Signup', { email, password });
-      alert(`${isLogin ? 'Login' : 'Signup'} successful!`);
-      
-      // Reset form
-      setEmail('');
-      setPassword('');
-    } catch (err) {
-      setError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
+    if (!isLogin) {
+        try {
+            const createUser = await fetch('http://localhost:5036/user/create-user', 
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    }, 
+                    body: JSON.stringify({name,email,password})
+                }
+            )
+            const response = await createUser.json()
+            console.log(response)
+            if (!createUser.ok) {
+                return console.log('error')
+            }
+        } catch (error) {
+            return console.log(error)
+        }
     }
+
+         if (isLogin) {
+        try {
+            const loginUser = await fetch('http://localhost:5036/user/login-user', 
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    }, 
+                    body: JSON.stringify({email,password})
+                }
+            )
+            const response = await loginUser.json()
+            console.log(response)
+            if (!loginUser.ok) {
+                return console.log('error')
+            }
+        } catch (error) {
+            return console.log(error)
+        }
+    };
+  
   };
 
-  
+ 
+
 
   return (
     <div style={{
@@ -79,6 +109,34 @@ export default function AuthPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+            {!isLogin&&<div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#555',
+            }}>
+              Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Alex"
+              disabled={loading}
+              style={{
+                padding: '12px 15px',
+                border: '2px solid #e0e0e0',
+                borderRadius: '6px',
+                fontSize: '14px',
+                transition: 'border-color 0.3s',
+                outline: 'none',
+                opacity: loading ? 0.7 : 1,
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#667eea'}
+              onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+            />
+          </div>}
           
           {/* Email Field */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
