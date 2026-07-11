@@ -1,5 +1,9 @@
 const userSchema = require('../schema/user-schema');
-const argon2 = require('argon2')
+const argon2 = require('argon2');
+const { verifyToken , generateToken } = require('../util');
+
+
+
 
 const createUser = async (req, res) => {
   try {
@@ -72,10 +76,80 @@ const updatePassword = async (req, res) => {
     });
   }
 };
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
+    const user = await userSchema.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "No user found with this email."
+      });
+    }
+
+    const isPasswordValid = await argon2.verify(user.password, password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message: "Password didn't match"
+      });
+    }
+
+    const token = generateToken(user);
+
+    return res.status(200).json({
+      message: "Login successful",
+      token
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: error.message
+    });
+  }
+};
+
+const uploadProfilePicture = async (req, res) => {
+  try {
+    const { email, profilePicture,token } = req.body;
+
+     const decodedToken = verifyToken(token);
+    if (decodedToken.email !== email) {
+      return res.status(401).json({
+        message: "Unauthorized"
+      });
+    }
+
+
+    const user = await userSchema.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "No user found with this email."
+      });
+    }
+   
+    user.profilePicture = profilePicture;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Profile picture updated successfully"
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: error.message
+    });
+  }
+};
 
 module.exports = {
   createUser,
   getUser,
   updatePassword,
+  loginUser,
+  uploadProfilePicture
 };
