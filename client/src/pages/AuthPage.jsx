@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function AuthPage () {
+  const navigate = useNavigate();
   const [name,setName] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -65,6 +67,10 @@ export default function AuthPage () {
                 }
             )
             const response = await loginUser.json()
+          if(response.token){
+            setToken(response.token)
+            navigate('/dashboard')
+          }
             console.log(response)
             if (!loginUser.ok) {
                 return console.log('error')
