@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 
 export default function AuthPage () {
@@ -67,14 +67,17 @@ export default function AuthPage () {
                 }
             )
             const response = await loginUser.json()
-          if(response.token){
-            setToken(response.token)
-            navigate('/dashboard')
-          }
+          
             console.log(response)
             if (!loginUser.ok) {
                 return console.log('error')
             }
+
+            if(response.token){
+              localStorage.setItem('token',response.token)
+            // setToken(response.token)
+            navigate('/profile')
+          }
         } catch (error) {
             return console.log(error)
         }

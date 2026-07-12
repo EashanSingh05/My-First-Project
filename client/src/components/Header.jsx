@@ -1,7 +1,10 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, User } from "lucide-react";
 import { Link } from "react-router";
 
 function Header() {
+
+  const token = localStorage.getItem('token') ? localStorage.getItem('token') : false
+
   return (
     <header
       style={{
@@ -57,7 +60,7 @@ function Header() {
           About
         </button>
 
-        <Link
+      <Link
           to='/auth'
           style={{
             backgroundColor: "#4CAF50",
@@ -71,7 +74,6 @@ function Header() {
         >
           Login
         </Link>
-
         <button
           style={{
             backgroundColor: "#4CAF50",
@@ -87,6 +89,11 @@ function Header() {
         >
           <ShoppingCart size={20} />
         </button>
+        <Link
+          to={'/profile'}>
+          <User size={20}/>
+        </Link>
+        
       </nav>
     </header>
   );

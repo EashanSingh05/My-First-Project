@@ -148,10 +148,20 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
+const showUserData = async(req, res)=> {
+  try {
+    const allData = await userSchema.find()
+    res.json(allData[allData.length-1])
+  } catch (error) {
+    return console.log(error)
+  }
+}
+
 module.exports = {
   createUser,
   getUser,
   updatePassword,
   loginUser,
-  uploadProfilePicture
+  uploadProfilePicture,
+  showUserData
 };
