@@ -1,18 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { User, Mail, Phone, MapPin, LogOut } from "lucide-react";
 
 
 export default function ProfilePage() {
-    const fetchHandler = async()={
+
+    const [userName,setUserName] = useState([])
+    // const [email,setEmail] = useState()
+                                          
+    // const fetchHandler = async()=>{
+                                      
+    //     try {
+    //         const response = await fetch('http://localhost:5036/user/last-data')
+                                                                                   
+    //         if (!response.ok) {
+    //             return console.log('error')
+    //         }                              
+    //         const data = await response.json()
+    //         setName(data.name)
+    //         setEmail(data.email)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+
+
+    const fetchNameHandler = async()=> {
         try {
-            const lastData = await 
+            const response = await fetch('http://localhost:5036/user/user-name')
+
+            if(!response.ok) {
+                return console.log('error')
+            }
+            const names = await response.json()
+            setUserName(names)
         } catch (error) {
-            
+            console.log(error)
         }
     }
 
 
   return (
+
     <div
       style={{
         minHeight: "100vh",
@@ -64,18 +93,18 @@ export default function ProfilePage() {
         >
           My Profile
         </h2>
-        <button onClick={fetchHandler}>Fetch Last Data</button>
+        {/* <button onClick={fetchHandler}>Fetch Last Data</button> */}
 
         {/* User Details */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <User color="#4CAF50" />
-            <span>John Doe</span>
+            {/* <span>{UserName}</span> */}
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Mail color="#4CAF50" />
-            <span>john@example.com</span>
+            <span>email</span>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -128,8 +157,17 @@ export default function ProfilePage() {
             <LogOut size={18} />
             Logout
           </button>
+          <button onClick={fetchNameHandler}>fetchNames</button>
+          <div style={{border:'1px solid black'}}>
+            {userName.map(data=> {
+                return <p>{data.name}</p>
+            })}
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+
+

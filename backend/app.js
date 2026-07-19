@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const database = require("./database");
 const userRoutes = require("./routes/user-routes");
+const adminRoutes = require("./routes/admin-routes")
 
 
 
@@ -19,7 +20,7 @@ app.use("/user", userRoutes);
 // /user/create-user
 // /user/get-user
 
-
+app.use('/admin', adminRoutes)
 
 
 

@@ -157,11 +157,22 @@ const showUserData = async(req, res)=> {
   }
 }
 
+
+const showUserName = async(req, res)=> {
+  try {
+    const allData = await userSchema.find()
+    res.json(allData)
+  } catch (error) {
+    return console.log(error)
+  }
+}
+
 module.exports = {
   createUser,
   getUser,
   updatePassword,
   loginUser,
   uploadProfilePicture,
-  showUserData
+  showUserData,
+  showUserName
 };
