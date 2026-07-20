@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
-
+  
     res.status(201).json(user);
     
   } catch (error) {
